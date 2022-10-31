@@ -1,0 +1,68 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <title>Imgur TOKEN 取得</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-5 h4">Imgur TOKEN 取得</h1>
+        <form class="row g-3 my-3">
+            <div class="col-12">
+                <h5 class="fw-bold">Step1 輸入 Client ID</h5>
+            </div>
+            <div class="col-8">
+                <label for="client_id" class="visually-hidden">client_id</label>
+                <input type="text" class="form-control" id="client_id" placeholder="YOUR_CLIENT_ID">
+            </div>
+            <div class="col-4">
+                <button id="submitBtn" type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+            </div>
+        </form>
+        <div class="mt-3">
+            <h5 class="fw-bold">Step2 按這邊進入網址認證</h5>
+            <a id="verifyBtn" target="_blank" class="btn btn-primary">按這邊認證</a>
+        </div>
+        <form class="row g-3 my-3">
+            <div class="col-12">
+                <h5 class="fw-bold">Step3 把回傳的網址貼上</h5>
+            </div>
+            <div class="col-8">
+                <label for="url_data" class="visually-hidden">url_data</label>
+                <input type="text" class="form-control" id="url_data" placeholder="轉址的網址">
+            </div>
+            <div class="col-4">
+                <button id="parseBtn" type="submit" class="btn btn-primary mb-3">解析</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('#verifyBtn').hide();
+
+            const url = 'https://imgur.com/#access_token=887e65a83e1c576bfd8854bb5b2d0bd2aea67849&expires_in=315360000&token_type=bearer&refresh_token=526ec6e757e7be3de31bb4753686bc0726e52c49&account_username=weijlin850621&account_id=107373969';
+            console.log(url.split('#')[1].split('&'));
+        })
+        $('#submitBtn').on('click', function (e) {
+            let cid = $('#client_id').val().trim();
+            e.preventDefault();
+
+            if (!cid) {
+                alert('請輸入client_id');
+                return;
+            }
+
+            $('#verifyBtn').attr('href', `https://api.imgur.com/oauth2/authorize?response_type=token&client_id=${cid}`).show();
+        })
+
+    </script>
+</body>
+
+</html>
