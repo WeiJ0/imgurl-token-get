@@ -21,12 +21,12 @@
                 <input type="text" class="form-control" id="client_id" placeholder="YOUR_CLIENT_ID">
             </div>
             <div class="col-4">
-                <button id="submitBtn" type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+                <button id="submit-btn" type="submit" class="btn btn-primary mb-3">下一步</button>
             </div>
         </form>
         <div class="mt-3">
             <h5 class="fw-bold">Step2 按這邊進入網址認證</h5>
-            <a id="verifyBtn" target="_blank" class="btn btn-primary">按這邊認證</a>
+            <a id="verify-btn" target="_blank" class="btn btn-primary disabled">按這邊認證</a>
         </div>
         <form class="row g-3 my-3">
             <div class="col-12">
@@ -37,29 +37,58 @@
                 <input type="text" class="form-control" id="url_data" placeholder="轉址的網址">
             </div>
             <div class="col-4">
-                <button id="parseBtn" type="submit" class="btn btn-primary mb-3">解析</button>
+                <button id="parse-btn" class="btn btn-primary mb-3">解析</button>
+            </div>
+            <div class="col-8">
+                <table class="table" id="result-table">
+                    <thead>
+                        <th>屬性</th>
+                        <th>值</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script>
-        $(function () {
-            $('#verifyBtn').hide();
-
-            const url = 'https://imgur.com/#access_token=887e65a83e1c576bfd8854bb5b2d0bd2aea67849&expires_in=315360000&token_type=bearer&refresh_token=526ec6e757e7be3de31bb4753686bc0726e52c49&account_username=weijlin850621&account_id=107373969';
-            console.log(url.split('#')[1].split('&'));
-        })
-        $('#submitBtn').on('click', function (e) {
-            let cid = $('#client_id').val().trim();
+        $('#submit-btn').on('click', function (e) {
             e.preventDefault();
+            let cid = $('#client_id').val().trim();
 
             if (!cid) {
                 alert('請輸入client_id');
                 return;
             }
 
-            $('#verifyBtn').attr('href', `https://api.imgur.com/oauth2/authorize?response_type=token&client_id=${cid}`).show();
+            $('#verify-btn')
+            .attr('href', `https://api.imgur.com/oauth2/authorize?response_type=token&client_id=${cid}`)
+            .show()
+            .removeClass('disabled');
+        })
+        $('#parse-btn').on('click', function (e) {
+            e.preventDefault();
+            let url = $('#url_data').val().trim();
+
+            if (!url) {
+                alert('轉址後網址');
+                return;
+            }
+
+            let datas = url.split('#')[1].split('&');
+            let dataObj = {};
+            datas.forEach(item => {
+                let _data = item.split('=');
+                $('#result-table > tbody').append(` 
+                    <tr>
+                        <td>${_data[0]}</td>
+                        <td>${_data[1]}</td/>
+                    </tr>
+                `)
+            })
         })
 
     </script>
